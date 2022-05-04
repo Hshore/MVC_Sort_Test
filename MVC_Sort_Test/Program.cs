@@ -1,4 +1,10 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using MVC_Sort_Test.Data;
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<MVC_Sort_TestContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("MVC_Sort_TestContext") ?? throw new InvalidOperationException("Connection string 'MVC_Sort_TestContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
