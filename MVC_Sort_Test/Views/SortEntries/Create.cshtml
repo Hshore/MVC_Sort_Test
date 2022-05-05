@@ -15,25 +15,25 @@
            
             <div class="form-group">
                 <label asp-for="OrigonalCSV" class="control-label">Comma-seperated values</label>
-                <label asp-for="OrigonalCSV" class="control-label">( Min/Max single int = -2147483647 / 2147483647 )</label>
-                <input asp-for="OrigonalCSV" class="form-control" />
+                <label asp-for="OrigonalCSV" class="control-label">(Min/Max single int = -2147483647 / 2147483647)</label>
+                <input asp-for="OrigonalCSV" class="form-control"  placeholder="123,45,6,7,89,0"/>            
                 <span asp-validation-for="OrigonalCSV" class="text-danger"></span>
             </div>
           <fieldset class="form-group">
             <legend>Sort direction</legend>
             <div class="form-check">
                 <input asp-for="SortOrder" value="1" type="radio" class="form-check-input" id="radio1" checked/>
-                <label class="form-check-label" for="radio1">Acending</label>
+                <label class="form-check-label" for="radio1">Ascending</label>
                 <span asp-validation-for="SortOrder" class="text-danger"></span>
             </div>
              <div class="mb-3 form-check">
                 <input asp-for="SortOrder" value="-1" type="radio" class="form-check-input" id="radio2" />
-                <label class="form-check-label" for="radio2">Decending</label>
+                <label class="form-check-label" for="radio2">Descending</label>
                 <span asp-validation-for="SortOrder" class="text-danger"></span>
             </div>
           </fieldset>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Sort!" class="btn btn-primary" />
             </div>
         </form>
     </div>

@@ -1,67 +1,107 @@
 ﻿@model IEnumerable<MVC_Sort_Test.Models.SortEntry>
 
+
 @{
-    ViewData["Title"] = "Index";
+	ViewData["Title"] = "Index";
+
+
 }
 
 <h1>Index</h1>
+<script type="text/javascript">
 
+	function AlertName(name)
+	{
+
+	alert('You clicked '+ name +"!");
+
+	}
+
+</script>
 <p>
-    <a asp-action="Create">Create New</a>
+	<a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateAdded)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OrigonalCSV)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SortedCSV)
-            </th>
-             <th>
-                @Html.DisplayNameFor(model => model.SortTime)
-            </th>
-             <th>
-                @Html.DisplayNameFor(model => model.SortOrder)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateAdded)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OrigonalCSV)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SortedCSV)
-            </td>
-             <td>
-                 @item.SortTime MilliSeconds
-                
-            </td>
-            <td>
-                 @item.SortOrder
-               
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
+<table class="table table-hover">
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.Id)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.DateAdded)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.OrigonalCSV)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.SortedCSV)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.SortTime)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.SortOrder)
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@item.Id
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.DateAdded)
+				</td>
+				<td>
+						
+					@{
+						if (item.OrigonalCSV != null && item.OrigonalCSV.Length > 10)
+						{
+							var s = item.OrigonalCSV.Substring(0, 10) + "...";
+							
+							@s
+						}
+						else
+						{
+							@item.OrigonalCSV
+						   	
+						}
+					}
+					 				
+				</td>
+				<td>
+					@{
+						if (item.SortedCSV != null && item.SortedCSV.Length > 10)
+						{
+							var s = item.SortedCSV.Substring(0, 10);
+							s += "...";
+							@s
+						}
+						else
+						{
+							@item.SortedCSV
+						   	
+						}
+					}
+				</td>
+				<td>
+					@item.SortTime MilliSeconds
+
+				</td>
+				<td>
+					@item.SortOrder
+
+				</td>
+				<td>
+					<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+					<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+					<a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
+					<a asp-action="DownloadFile" asp-route-id="@item.Id">Download</a>				
+				</td>
+			</tr>
+		}
+	</tbody>
 </table>

@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MVC_Sort_Test.Data;
 using MVC_Sort_Test.Models;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Text;
 
 namespace MVC_Sort_Test.Controllers
 {
@@ -24,6 +27,7 @@ namespace MVC_Sort_Test.Controllers
         // GET: SortEntries
         public async Task<IActionResult> Index()
         {
+           
             return View(await _context.SortEntry.ToListAsync());
         }
 
@@ -60,12 +64,16 @@ namespace MVC_Sort_Test.Controllers
         {
 
             //
+           
+
             sortEntry.DateAdded = DateTime.Now;
+            string[] split = sortEntry.OrigonalCSV.Split(',');          
             List<int> OGList = new List<int>();
             List<int> SortedList = new List<int>();
 
-            //Confirm string is csv and add items to list
-            foreach (var item in sortEntry.OrigonalCSV.Split(','))
+            //Confirm items are ints
+            //This try catch block may be redundant because of the regx validation in SortEntries.cs
+            foreach (var item in split)
             {
                 try
                 {
@@ -74,7 +82,7 @@ namespace MVC_Sort_Test.Controllers
                 }
                 catch (Exception)
                 {
-                    throw;
+                    return View(sortEntry);
                 }
             }
 
@@ -90,13 +98,13 @@ namespace MVC_Sort_Test.Controllers
 
             if (sortEntry.SortOrder == 1)
             {
-                watch.Restart();
+                watch.Restart();               
                 foreach (var n in acend)
                 {
-                    SortedList.Add(n);
-                    sortEntry.SortedCSV += $"{n},";
-                }
+                    SortedList.Add(n);                  
+                }                
                 watch.Stop();
+                sortEntry.SortedCSV = string.Join<int>(",", SortedList);
                 sortEntry.SortTime = watch.Elapsed.TotalMilliseconds;
 
             }
@@ -106,17 +114,17 @@ namespace MVC_Sort_Test.Controllers
                 foreach (var n in decend)
                 {
                     SortedList.Add(n);
-                    sortEntry.SortedCSV += $"{n},";
                 }
                 watch.Stop();
-                sortEntry.SortTime = watch.Elapsed.TotalSeconds;
+                sortEntry.SortedCSV = string.Join<int>(",", SortedList);
+                sortEntry.SortTime = watch.Elapsed.TotalMilliseconds;
             }
 
             if (ModelState.IsValid)
             {                
                 _context.Add(sortEntry);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), new { id = sortEntry.Id });
             }
            
             return View(sortEntry);
@@ -200,6 +208,39 @@ namespace MVC_Sort_Test.Controllers
             _context.SortEntry.Remove(sortEntry);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        // GET: SortEntries/DownloadFile
+        public async Task<IActionResult> DownloadFile(int id)
+        {
+            // Get item
+            var sortEntry = await _context.SortEntry
+               .FirstOrDefaultAsync(m => m.Id == id);
+            if (sortEntry == null)
+            {
+                return NotFound();
+            }
+
+            //Build the File Path.
+            // string path = @"C:\Users\Hayden\source\repos\MVC_Sort_Test\MVC_Sort_Test\Data\TextFile.txt";
+
+            //Build JSON
+            var json = JsonSerializer.Serialize(sortEntry);
+
+            //Read the JSON data into Byte Array.
+            var utf8 = new UTF8Encoding();
+            byte[] bytes = utf8.GetBytes(json);           
+            
+            //Send the File to Download.
+            return File(bytes, "application/octet-stream", sortEntry.Id+".json");
+        }
+
+
+
+        //GET SorEntries/Chart
+        public IActionResult Chart()
+        {
+            return PartialView("Chart");
         }
 
         private bool SortEntryExists(int id)
