@@ -120,15 +120,112 @@ namespace MVC_Sort_Test.Controllers
                 sortEntry.SortTime = watch.Elapsed.TotalMilliseconds;
             }
 
+            var newEntry = new SortEntry
+            {
+                DateAdded = DateTime.Now,
+                SortedCSV = "1,2,3,4",
+                SortTime = 0.1,
+                OrigonalCSV = "4,3,2,1",
+                SortOrder = -1,
+            };
+           
             if (ModelState.IsValid)
             {                
                 _context.Add(sortEntry);
+               // _context.Add(newEntry);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Details), new { id = sortEntry.Id });
             }
            
             return View(sortEntry);
         }
+
+        // POST: SortEntries/CreateRandom
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateRandom()
+        {
+            //List of new entries with empty sortedCSV
+            List<SortEntry> UnsortedEntries = new List<SortEntry>();
+            var watch = new Stopwatch();
+
+           //Build new entries
+            for (int i = 0; i < 1000; i++)
+            {
+                List<int> OGList = new List<int>();                             
+              
+                var randIntCount = Extensions.ThreadSafeRandom.Next(2, 400);
+                var randDirection = (Extensions.ThreadSafeRandom.Next(0, 2) == 1) ? 1 : -1;
+                for (int j = 0; j < randIntCount; j++)
+                {
+                    OGList.Add(Extensions.ThreadSafeRandom.Next(0,5000));
+                }
+
+                var newEntry = new SortEntry
+                {
+                    DateAdded = DateTime.Now,
+                    SortedCSV = "",
+                    OrigonalCSV = string.Join<int>(",", OGList),
+                    SortOrder = randDirection
+                };
+
+                UnsortedEntries.Add(newEntry);              
+            }
+
+            List<int> ints = new List<int>();
+            List<int> sortedInts = new List<int>();
+            
+
+            //Generate SortedCVS
+            foreach (var item in UnsortedEntries)
+            {
+                ints.Clear();
+                var split = item.OrigonalCSV.Split(',');
+               
+                foreach (var s in split)
+                {
+                    ints.Add(int.Parse(s));
+                }
+
+              //  ints.Sort();
+               // ints.Reverse();
+                if (item.SortOrder == 1)
+                {
+                   
+                    watch.Restart();
+                  //  var sorted = ints.OrderBy(num => num).ToArray();                   
+                    ints.Sort();                   
+                    watch.Stop();
+                    item.SortedCSV = string.Join<int>(",", ints);
+                    item.SortTime = watch.Elapsed.TotalMilliseconds;
+
+                }
+                else
+                {
+                    watch.Restart();
+                   // var sorted = ints.OrderByDescending(num => num).ToArray();
+                    ints.Sort();
+                    ints.Reverse();
+                    watch.Stop();
+                    item.SortedCSV = string.Join<int>(",", ints);
+                    item.SortTime = watch.Elapsed.TotalMilliseconds;
+                }
+
+                if (ModelState.IsValid)
+                {
+                    _context.Add(item);
+
+
+                    // return RedirectToAction(nameof(Index));
+                }
+
+            }
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
 
         // GET: SortEntries/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -209,6 +306,36 @@ namespace MVC_Sort_Test.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+
+        // GET: SortEntries/DeleteAll
+        public IActionResult DeleteAll()
+        {
+            
+
+            return View();
+        }
+
+
+
+        // POST: SortEntries/DeleteAll
+        [HttpPost, ActionName("DeleteAll")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteAllConfirmed(int id)
+        {
+           IAsyncEnumerable<SortEntry> sortEntry = _context.SortEntry.AsAsyncEnumerable<SortEntry>();
+            //  _context.SortEntry.Remove(sortEntry);
+            //  await _context.SaveChangesAsync(); 
+            await foreach (var item in sortEntry)
+            {
+              
+                _context.SortEntry.Remove(item);
+
+            }
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
 
         // GET: SortEntries/DownloadFile
         public async Task<IActionResult> DownloadFile(int id)

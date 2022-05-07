@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MVC_Sort_Test.Migrations
 {
     [DbContext(typeof(MVC_Sort_TestContext))]
-    [Migration("20220504161228_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20220506234933_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -36,6 +36,7 @@ namespace MVC_Sort_Test.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("OrigonalCSV")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("SortOrder")

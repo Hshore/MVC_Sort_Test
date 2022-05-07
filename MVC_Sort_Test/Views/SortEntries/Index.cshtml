@@ -7,101 +7,318 @@
 
 }
 
-<h1>Index</h1>
-<script type="text/javascript">
 
-	function AlertName(name)
-	{
 
-	alert('You clicked '+ name +"!");
 
-	}
 
-</script>
+<div class="chart-container" style="position: relative; max-height: 50vh; height:40vh;">
+	<canvas id="myChart"></canvas>
+
+</div>
 <p>
 	<a asp-action="Create">Create New</a>
+	<a asp-action="DeleteAll">Delete All</a>
+
 </p>
-<table class="table table-hover">
+<table id="myTable" class="table table-hover">
 	<thead>
 		<tr>
-			<th>
+			<th onclick="sortTable(0)">
 				@Html.DisplayNameFor(model => model.Id)
 			</th>
-			<th>
+			<th onclick="sortTable(1)">
 				@Html.DisplayNameFor(model => model.DateAdded)
 			</th>
-			<th>
+			<th onclick="sortTable(2)">
 				@Html.DisplayNameFor(model => model.OrigonalCSV)
 			</th>
-			<th>
+			<th onclick="sortTable(3)">
 				@Html.DisplayNameFor(model => model.SortedCSV)
 			</th>
-			<th>
+			<th onclick="sortTable(4)">
 				@Html.DisplayNameFor(model => model.SortTime)
 			</th>
-			<th>
+			<th onclick="sortTable(5)">
 				@Html.DisplayNameFor(model => model.SortOrder)
 			</th>
 			<th></th>
 		</tr>
 	</thead>
 	<tbody>
-		@foreach (var item in Model)
-		{
-			<tr>
-				<td>
-					@item.Id
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.DateAdded)
-				</td>
-				<td>
-						
-					@{
-						if (item.OrigonalCSV != null && item.OrigonalCSV.Length > 10)
-						{
-							var s = item.OrigonalCSV.Substring(0, 10) + "...";
-							
-							@s
-						}
-						else
-						{
-							@item.OrigonalCSV
-						   	
-						}
-					}
-					 				
-				</td>
-				<td>
-					@{
-						if (item.SortedCSV != null && item.SortedCSV.Length > 10)
-						{
-							var s = item.SortedCSV.Substring(0, 10);
-							s += "...";
-							@s
-						}
-						else
-						{
-							@item.SortedCSV
-						   	
-						}
-					}
-				</td>
-				<td>
-					@item.SortTime MilliSeconds
+		@{
+			var max = 9;
+			var count = 0;
+			foreach (var item in Model)
+			{
+				if (count > max)
+				{
+					break;
+				}
+				<tr onclick="" id="@count row">
+					<td id="@count row Cell id">
+						@item.Id
+					</td>
+					<td id="@count row Cell dateAdded">
+						@Html.DisplayFor(modelItem => item.DateAdded)
+					</td>
+					<td id="@count row Cell originalCSV">
 
-				</td>
-				<td>
-					@item.SortOrder
+						@{
+							if (item.OrigonalCSV != null && item.OrigonalCSV.Length > 10)
+							{
+								var s = item.OrigonalCSV.Substring(0, 10) + "...";
 
-				</td>
-				<td>
-					<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-					<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-					<a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
-					<a asp-action="DownloadFile" asp-route-id="@item.Id">Download</a>				
-				</td>
-			</tr>
+								@s
+							}
+							else
+							{
+								@item.OrigonalCSV
+
+							}
+						}
+
+					</td>
+					<td id="@count row Cell sortedCSV">
+						@{
+							if (item.SortedCSV != null && item.SortedCSV.Length > 10)
+							{
+								var s = item.SortedCSV.Substring(0, 10);
+								s += "...";
+								@s
+							}
+							else
+							{
+								@item.SortedCSV
+
+							}
+						}
+					</td>
+					<td id="@count row Cell sortTime">
+						@item.SortTime MilliSeconds
+
+					</td>
+					<td id="@count row Cell sortOrder">
+						@item.SortOrder
+
+					</td>
+					<td id="@count row Cell links">
+						<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+						<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+						<a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
+						<a asp-action="DownloadFile" asp-route-id="@item.Id">Download</a>
+					</td>
+				</tr>
+				count++;
+			}
+
 		}
 	</tbody>
 </table>
+<button type="button" class="btn btn-outline-primary btn-sm" onclick="changePage(0)">&lt&ltFirst</button>
+<button type="button" class="btn btn-outline-primary btn-sm" onclick="changePage(-1)">&ltPrevious</button>
+<button type="button" class="btn btn-outline-primary btn-sm" onclick="changePage()">Next&gt</button>
+<button type="button" class="btn btn-outline-primary btn-sm" onclick="changePage(((model.length / 10) -1))">Last&gt&gt</button>
+
+
+
+
+
+<script type="text/javascript">
+	let tablePage = 0;
+
+	const model = @Html.Raw(Json.Serialize(Model));
+
+
+	function changePage(x){
+		let totalPages = (model.length / 10);
+		if (x == null){
+			if (tablePage < totalPages-1) {
+				tablePage = (tablePage + 1);
+				nextTablePage();
+			}
+		}else if (x == -1) {
+			if (tablePage > 0) {
+				tablePage = (tablePage - 1);
+				nextTablePage();
+			}
+		}else {
+			tablePage = x;
+			nextTablePage();
+		}
+	}
+
+	function nextTablePage() {
+		var table = document.getElementById("myTable");
+		var rows = table.rows;
+		var firstItemIndex = tablePage * (rows.length-1);
+		var tenItems = [
+			model[firstItemIndex],
+			model[firstItemIndex + 1],
+			model[firstItemIndex + 2],
+			model[firstItemIndex + 3],
+			model[firstItemIndex + 4],
+			model[firstItemIndex + 5],
+			model[firstItemIndex + 6],
+			model[firstItemIndex + 7],
+			model[firstItemIndex + 8],
+			model[firstItemIndex + 9]
+		];
+
+		//clear all rows
+		for (i = 0; i < 10; i++) {
+			document.getElementById(`${i} row Cell id`).innerHTML = "";
+			document.getElementById(`${i} row Cell dateAdded`).innerHTML = "";
+			document.getElementById(`${i} row Cell originalCSV`).innerHTML = "";
+			document.getElementById(`${i} row Cell sortedCSV`).innerHTML = "";
+			document.getElementById(`${i} row Cell sortTime`).innerHTML = "";
+			document.getElementById(`${i} row Cell sortOrder`).innerHTML = "";
+			document.getElementById(`${i} row Cell links`).innerHTML = "";
+		}
+		//write new entries
+		for (i = 0; i < tenItems.length; i++) {
+
+
+			document.getElementById(`${i} row Cell id`).innerHTML = tenItems[i].id;
+			document.getElementById(`${i} row Cell dateAdded`).innerHTML = tenItems[i].dateAdded.substring(0, 19);
+			document.getElementById(`${i} row Cell originalCSV`).innerHTML = tenItems[i].origonalCSV.substring(0, 10) + "...";
+			document.getElementById(`${i} row Cell sortedCSV`).innerHTML = tenItems[i].sortedCSV.substring(0, 10);
+			document.getElementById(`${i} row Cell sortTime`).innerHTML = tenItems[i].sortTime;
+			document.getElementById(`${i} row Cell sortOrder`).innerHTML = tenItems[i].sortOrder;
+			let linkHtml = `<a href="SortEntries/Edit/${tenItems[i].id}">Edit</a> | `;
+			linkHtml += `<a href="SortEntries/Details/${tenItems[i].id}">Details</a> | `;
+			linkHtml += `<a href="SortEntries/Delete/${tenItems[i].id}">Delete</a> | `;
+			linkHtml += `<a href="SortEntries/DownloadFile/${tenItems[i].id}">Download</a>`;
+			document.getElementById(`${i} row Cell links`).innerHTML = linkHtml;
+
+
+
+		}
+
+	}
+
+	function sortTable(n) {
+		var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+		table = document.getElementById("myTable");
+		switching = true;
+		//Set the sorting direction to ascending:
+		dir = "asc";
+		/*Make a loop that will continue until
+		no switching has been done:*/
+		while (switching) {
+			//start by saying: no switching is done:
+			switching = false;
+			rows = table.rows;
+			/*Loop through all table rows (except the
+			first, which contains table headers):*/
+			for (i = 1; i < (rows.length - 1); i++) {
+				//start by saying there should be no switching:
+				shouldSwitch = false;
+				/*Get the two elements you want to compare,
+				one from current row and one from the next:*/
+				x = rows[i].getElementsByTagName("TD")[n];
+				y = rows[i + 1].getElementsByTagName("TD")[n];
+				/*check if the two rows should switch place,
+				   based on the direction, asc or desc:*/
+				if (dir == "asc") {
+					if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+						//if so, mark as a switch and break the loop:
+						shouldSwitch = true;
+						break;
+					}
+				} else if (dir == "desc") {
+					if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+						//if so, mark as a switch and break the loop:
+						shouldSwitch = true;
+						break;
+					}
+				}
+			}
+			if (shouldSwitch) {
+				/*If a switch has been marked, make the switch
+				and mark that a switch has been done:*/
+				rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+				switching = true;
+				//Each time a switch is done, increase this count by 1:
+				switchcount++;
+			} else {
+				/*If no switching has been done AND the direction is "asc",
+				set the direction to "desc" and run the while loop again.*/
+				if (switchcount == 0 && dir == "asc") {
+					dir = "desc";
+					switching = true;
+				}
+			}
+		}
+	}
+</script>
+
+<script type="text/javascript">
+
+
+
+
+		var ascendingData = [
+	@{
+		foreach (var item in Model)
+		{
+			if (item.SortOrder == 1)
+			{
+				var s = $"{{  x:{item.SortTime}, y:{item.OrigonalCSV.Split(',').Length} }},";
+				@s
+			}
+		}
+	}
+		];
+		var descendingData = [
+	@{
+		foreach (var item in Model)
+		{
+			if (item.SortOrder == -1)
+			{
+				var s = $"{{  x:{item.SortTime}, y:{item.OrigonalCSV.Split(',').Length} }},";
+				@s
+			}
+		}
+	}
+		];
+		var radius = 5;
+		function getRadius() {
+			return radius;
+		}
+
+		const ctx = document.getElementById('myChart');
+		const myChart = new Chart(ctx, {
+		type: 'scatter',
+		data: {
+			datasets: [{
+				label: "Ascending",
+				backgroundColor: 'rgba(255, 0, 0, 1)',
+				data: ascendingData
+			}, {
+				label: "Descending",
+				backgroundColor: 'rgba(0, 0, 255, 1)',
+				data: descendingData
+			}]
+		},
+		options: {
+		   responsive: true,
+		   maintainAspectRatio: false,
+		   onClick(e) {
+				const activePoints = myChart.getElementsAtEventForMode(e, 'nearest', {
+					intersect: true
+				}, false)
+			
+				console.log(activePoints[0]);
+			},
+		   elements: {
+			   point: {
+				   radius: getRadius(),
+				   display: true
+			   }
+		   }
+		}
+	});
+</script>
+
+
+

@@ -34,6 +34,7 @@ namespace MVC_Sort_Test.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("OrigonalCSV")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("SortOrder")
