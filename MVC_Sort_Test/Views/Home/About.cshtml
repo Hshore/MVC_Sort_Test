@@ -19,14 +19,19 @@ this aproach will also allow a file with comma seperated values to be
 uploaded and sorted (I have not yet implemented file upload).
 </p>
 <h2>Problems</h2>
+<h5>Sorting speed inconsistancy:</h5>
 <p>
-Sorting speed inconsistancy:
 When sorting a user input CSV the sort operation time seems to fluctuate wildly. I do not understand why this happens. I decided to creat a way to
 randomly generate 1000 CSV entries of variable length, these are then sorted just like a user entered CSV. With 1000 entries the graph shows that mostly
 the sort times fit to a neat line but a few entries will not, also the first entry is always slow.
 This problem means that the sort time for every user generated CSV will vary greatly, the sort time is technicaly correct as that is how long it took to sort
 the array, but it may not fit the expected gradient.
 </p>
+<h5>Possible fixs:</h5>
 <p>
- 
+    <ul>
+        <li>Run each sort many times and take an average.</li>
+        <li>Run each sort many times and take the last.</li>
+        <li>Run sort once and compare to a pre computed gradient of expected time results.</li>
+    </ul>
 </p>
