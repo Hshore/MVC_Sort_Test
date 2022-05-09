@@ -17,11 +17,11 @@ This makes it easier to find, see details of and delete specific entries.
 I decided to use comma separated values as the input as this seemed the simplest way for a user to manually enter a list of numbers.
 In addition, this approach allows a file with comma separated values to be uploaded and sorted (I have not yet implemented file upload).
 </p>
-<h2>Problems</h2>
+<h2>Issues</h2>
 <h5>Sorting speed inconsistency:</h5>
 <p>
-When sorting a user inputted CSV the sort operation time seems to fluctuate. I do not understand why this happens.
-I decided to create a way to randomly generate 1000 CSV entries of variable length.
+When sorting a user inputted CSV the sort operation time seems to fluctuate. I dont not fully understand why this is but i assume it is to do with the underlying code
+behind the array.sort() method. I created a way to randomly generate 1000 CSV entries of variable length.
 These are sorted just like a user entered CSV. With 1000 entries the graph shows that mostly the sort times fit to a neat line but a few entries will not.
 The first entry is always slow. This problem means that the Sort Time for every user generated CSV will vary greatly,
 the sort time is technically correct as that is how long it took to sort the array, but it may not fit the expected gradient.
@@ -30,7 +30,6 @@ the sort time is technically correct as that is how long it took to sort the arr
 <p>
     <ul>
         <li>Run each sort many times and take an average.</li>
-        <li>Run each sort many times and take the last.</li>
-        <li>Run sort once and compare to a pre computed gradient of expected time results.</li>
+        <li>Run sort once and compare to a pre computed gradient of expected time results. Run again if SortTime is not within tolerance.</li>
     </ul>
 </p>
