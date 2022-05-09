@@ -1,24 +1,16 @@
 ﻿@model IEnumerable<MVC_Sort_Test.Models.SortEntry>
 
-
 @{
 	ViewData["Title"] = "Index";
-
-
 }
-
-
-
-
 
 <div class="chart-container" style="position: relative; max-height: 35vh; height:35vh;">
 	<canvas id="myChart"></canvas>
-
 </div>
+
 <div>
 	<table id="selectedTable" class="table table-hover table-sm">
-		<thead>
-		
+		<thead>	
 		</thead>
 		<tbody id="selectedTableBody">
 			<tr>
@@ -77,11 +69,6 @@
 		</div>	
 	}
 </div>
-
-
-
-
-
 
 <script type="text/javascript">
 	const model = @Html.Raw(Json.Serialize(Model));
