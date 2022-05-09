@@ -10,7 +10,7 @@ namespace MVC_Sort_Test.Models
         public DateTime DateAdded { get; set; }
         
         [Required]
-        [RegularExpression(@"^\d+,\d+(,\d+)*$", ErrorMessage = "Must match format '123,45,6,78,90'")]
+        [RegularExpression(@"^-?\d+,-?\d+(,-?\d+)*$", ErrorMessage = "Must match format '123,45,6,78,90'")]
         public string? OriginalCSV { get; set; }
         
          
