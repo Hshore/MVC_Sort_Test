@@ -1,39 +1,28 @@
 ﻿@model MVC_Sort_Test.Models.SortEntry
 
 @{
-    ViewData["Title"] = "Delete";
+	ViewData["Title"] = "Delete";
 }
 
-<h1>Delete</h1>
+<h1 class="text-center">Delete</h1>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>SortEntry</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateAdded)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateAdded)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.OrigonalCSV)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.OrigonalCSV)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SortedCSV)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SortedCSV)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+<h3 class="text-center">Are you sure you want to delete this entry?</h3>
+
+<h4 class="text-center">id#@Model.Id</h4>
+<hr />
+<h5 class="text-center">DateAdded</h5>
+<div class="text-center text-break text-wrap">@Model.DateAdded</div>
+<h5 class="text-center">OriginalCSV</h5>
+<div class="text-center text-break text-wrap">@Model.OrigonalCSV</div>
+<h5 class="text-center">SortedCSV</h5>
+<div class="text-center text-break text-wrap">@Model.SortedCSV</div>
+
+
+<div class="text-center">
+	<form asp-action="Delete">
+		<input type="hidden" asp-for="Id" />
+		<input type="submit" value="Delete" class="btn btn-danger" /> |
+		<a asp-action="Index">Back to List</a>
+	</form>
 </div>
+

@@ -64,71 +64,106 @@ namespace MVC_Sort_Test.Controllers
         {
 
             //
-           
 
+            var watch = new Stopwatch();
             sortEntry.DateAdded = DateTime.Now;
-            string[] split = sortEntry.OrigonalCSV.Split(',');          
-            List<int> OGList = new List<int>();
-            List<int> SortedList = new List<int>();
-
-            //Confirm items are ints
-            //This try catch block may be redundant because of the regx validation in SortEntries.cs
-            foreach (var item in split)
+            string[] split = sortEntry.OrigonalCSV.Split(',');
+            List<int> ints = new List<int>();
+            List<int> sortedInts = new List<int>();
+            foreach (var s in split)
             {
                 try
                 {
-                    int thisInt = int.Parse(item);
-                    OGList.Add(thisInt);
+                    ints.Add(int.Parse(s));
                 }
                 catch (Exception)
                 {
-                    return View(sortEntry);
+                   //skip this entry
                 }
             }
 
-
-            //Sort
-            var acend = from num in OGList
-                        orderby num
-                        select num;
-            var decend = from num in OGList
-                         orderby num descending
-                         select num;
-            var watch = new Stopwatch();
-
             if (sortEntry.SortOrder == 1)
             {
-                watch.Restart();               
-                foreach (var n in acend)
-                {
-                    SortedList.Add(n);                  
-                }                
+
+                watch.Restart();
+                //  var sorted = ints.OrderBy(num => num).ToArray();                   
+                ints.Sort();
                 watch.Stop();
-                sortEntry.SortedCSV = string.Join<int>(",", SortedList);
+                sortEntry.SortedCSV = string.Join<int>(",", ints);
                 sortEntry.SortTime = watch.Elapsed.TotalMilliseconds;
 
             }
             else
             {
                 watch.Restart();
-                foreach (var n in decend)
-                {
-                    SortedList.Add(n);
-                }
+                // var sorted = ints.OrderByDescending(num => num).ToArray();
+                ints.Sort();
+                ints.Reverse();
                 watch.Stop();
-                sortEntry.SortedCSV = string.Join<int>(",", SortedList);
+                sortEntry.SortedCSV = string.Join<int>(",", ints);
                 sortEntry.SortTime = watch.Elapsed.TotalMilliseconds;
             }
+            /*           List<int> OGList = new List<int>();
+                       List<int> SortedList = new List<int>();
 
-            var newEntry = new SortEntry
-            {
-                DateAdded = DateTime.Now,
-                SortedCSV = "1,2,3,4",
-                SortTime = 0.1,
-                OrigonalCSV = "4,3,2,1",
-                SortOrder = -1,
-            };
-           
+                       //Confirm items are ints
+                       //This try catch block may be redundant because of the regx validation in SortEntries.cs
+                       foreach (var item in split)
+                       {
+                           try
+                           {
+                               int thisInt = int.Parse(item);
+                               OGList.Add(thisInt);
+                           }
+                           catch (Exception)
+                           {
+                               return View(sortEntry);
+                           }
+                       }
+
+
+                       //Sort
+                       var acend = from num in OGList
+                                   orderby num
+                                   select num;
+                       var decend = from num in OGList
+                                    orderby num descending
+                                    select num;
+                       var watch = new Stopwatch();
+
+                       if (sortEntry.SortOrder == 1)
+                       {
+                           watch.Restart();               
+                           foreach (var n in acend)
+                           {
+                               SortedList.Add(n);                  
+                           }                
+                           watch.Stop();
+                           sortEntry.SortedCSV = string.Join<int>(",", SortedList);
+                           sortEntry.SortTime = watch.Elapsed.TotalMilliseconds;
+
+                       }
+                       else
+                       {
+                           watch.Restart();
+                           foreach (var n in decend)
+                           {
+                               SortedList.Add(n);
+                           }
+                           watch.Stop();
+                           sortEntry.SortedCSV = string.Join<int>(",", SortedList);
+                           sortEntry.SortTime = watch.Elapsed.TotalMilliseconds;
+                       }
+
+                       var newEntry = new SortEntry
+                       {
+                           DateAdded = DateTime.Now,
+                           SortedCSV = "1,2,3,4",
+                           SortTime = 0.1,
+                           OrigonalCSV = "4,3,2,1",
+                           SortOrder = -1,
+                       };
+                      */
             if (ModelState.IsValid)
             {                
                 _context.Add(sortEntry);
@@ -152,11 +187,13 @@ namespace MVC_Sort_Test.Controllers
             var watch = new Stopwatch();
 
            //Build new entries
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 1010; i++)
             {
+
+
                 List<int> OGList = new List<int>();                             
               
-                var randIntCount = Extensions.ThreadSafeRandom.Next(2, 400);
+                var randIntCount = Extensions.ThreadSafeRandom.Next(2, 1000);
                 var randDirection = (Extensions.ThreadSafeRandom.Next(0, 2) == 1) ? 1 : -1;
                 for (int j = 0; j < randIntCount; j++)
                 {
@@ -176,9 +213,10 @@ namespace MVC_Sort_Test.Controllers
 
             List<int> ints = new List<int>();
             List<int> sortedInts = new List<int>();
-            
+
 
             //Generate SortedCVS
+            var count = 0;
             foreach (var item in UnsortedEntries)
             {
                 ints.Clear();
@@ -213,14 +251,14 @@ namespace MVC_Sort_Test.Controllers
                     item.SortTime = watch.Elapsed.TotalMilliseconds;
                 }
 
-                if (ModelState.IsValid)
+                if (ModelState.IsValid && count > 10)
                 {
                     _context.Add(item);
 
 
                     // return RedirectToAction(nameof(Index));
                 }
-
+                count++;
             }
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
