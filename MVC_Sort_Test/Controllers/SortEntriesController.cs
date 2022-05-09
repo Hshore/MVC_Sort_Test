@@ -60,7 +60,7 @@ namespace MVC_Sort_Test.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,OriginalCSV")] SortEntry sortEntry)
+        public async Task<IActionResult> Create([Bind("Id,OriginalCSV,SortOrder")] SortEntry sortEntry)
         {
             var watch = new Stopwatch();
             List<int> ints = new List<int>();
@@ -196,7 +196,7 @@ namespace MVC_Sort_Test.Controllers
                 //Check model is valid
                 //The count check is there to skip over the first 10 entries
                 //The first few sorts always seem to be slow and this is a effort to filter them out
-                if (ModelState.IsValid && count > 10)
+                if (ModelState.IsValid )
                 {
                     _context.Add(item);
                 }
