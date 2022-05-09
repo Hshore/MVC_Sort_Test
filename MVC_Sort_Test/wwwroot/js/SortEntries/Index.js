@@ -1,8 +1,9 @@
-﻿let tablePage = 0;
+﻿//variables for current table page and total pages
+let tablePage = 0;
 let totalPages = Math.ceil((model.length / 10));
 
-
-
+//Sort table by click on headers
+//only sorts the current page
 function sortTable(n) {
     var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
     table = document.getElementById("myTable");
@@ -20,12 +21,12 @@ function sortTable(n) {
         for (i = 1; i < (rows.length - 1); i++) {
             //start by saying there should be no switching:
             shouldSwitch = false;
-            /*Get the two elements you want to compare,
-            one from current row and one from the next:*/
+            //Get the two elements you want to compare,
+            //one from current row and one from the next
             x = rows[i].getElementsByTagName("TD")[n];
             y = rows[i + 1].getElementsByTagName("TD")[n];
-            /*check if the two rows should switch place,
-               based on the direction, asc or desc:*/
+            //check if the two rows should switch place,
+            //based on the direction, asc or desc:
             if (dir == "asc") {
                 if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
                     //if so, mark as a switch and break the loop:
@@ -41,15 +42,15 @@ function sortTable(n) {
             }
         }
         if (shouldSwitch) {
-            /*If a switch has been marked, make the switch
-            and mark that a switch has been done:*/
+            //If a switch has been marked, make the switch
+            //and mark that a switch has been done:
             rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
             switching = true;
             //Each time a switch is done, increase this count by 1:
             switchcount++;
         } else {
-            /*If no switching has been done AND the direction is "asc",
-            set the direction to "desc" and run the while loop again.*/
+            //If no switching has been done AND the direction is "asc",
+            //set the direction to "desc" and run the while loop again.
             if (switchcount == 0 && dir == "asc") {
                 dir = "desc";
                 switching = true;
@@ -58,24 +59,33 @@ function sortTable(n) {
     }
 }
 
-function changePage(x) {
+//change table page
+function changePage(x) {   
+    //if x is null increment page by 1
     if (x == null) {
         if (tablePage < (totalPages - 1)) {
             tablePage = (tablePage + 1);
-            nextTablePage("tableBody");
+            nextTablePage("tableBody");           
         }
-    } else if (x == -1) {
-        if (tablePage > 0) {
-            tablePage = (tablePage - 1);
-            nextTablePage("tableBody");
+    } // check number is a int
+    else if (Number.isInteger(x)) {
+        // if x is -1 decrement page by 1 
+        if (x == -1) {
+            if (tablePage > 0) {
+                tablePage = (tablePage - 1);
+                nextTablePage("tableBody");              
+            }
+        } // if x is any other number set page number to x
+        else if (x <= totalPages){
+            tablePage = x;
+            nextTablePage("tableBody");            
         }
-    } else {
-        tablePage = x;
-        nextTablePage("tableBody");
     }
+    //set page number in UI
     document.getElementById(`pageNum`).innerHTML = (tablePage + 1);
 }
 
+//Build a <tr> helper
 function buildNewRow(count, name) {
     let Html = `<tr id="${name}${count}">\n`;
     Html += `<td id="${name}${count} row Cell id"></td>\n`;
@@ -86,10 +96,10 @@ function buildNewRow(count, name) {
     Html += `<td id="${name}${count} row Cell sortOrder" align="center"></td>\n`;
     Html += `<td id="${name}${count} row Cell links" align="right"></td>\n`;
     Html += `</tr>\n`;
-
     return Html;
 }
 
+//Build table page
 function nextTablePage(tableName) {
     //get table body
     var tablebody = document.getElementById(tableName);
@@ -119,7 +129,6 @@ function nextTablePage(tableName) {
     for (var i = 0; i < neededrowCount; i++) {
         tablebody.innerHTML += buildNewRow(i, tableName);
     }
-
     //write new entries
     for (i = 0; i < neededrowCount; i++) {
 
@@ -134,17 +143,15 @@ function nextTablePage(tableName) {
         linkHtml += `<a href="SortEntries/Delete/${Items[i].id}">Delete</a> | `;
         linkHtml += `<a href="SortEntries/DownloadFile/${Items[i].id}">Download</a>`;
         document.getElementById(`${tableName}${i} row Cell links`).innerHTML = linkHtml;
-
     }
-
 }
 
-
+//Chart Data
 var ascendingData = [];
 var ascendingDataModelIndex = [];
 var descendingData = [];
 var descendingDataModelIndex = [];
-
+//Populate chart data
 function addData(item, index, arr) {
     if (item.sortOrder == 1) {
         ascendingData.push({ x: item.sortTime, y: item.sortedCSV.split(",").length });
@@ -156,7 +163,9 @@ function addData(item, index, arr) {
 }
 model.forEach(addData)
 
+//Set selected point on graph to selected table, onclick event for chart
 function setSelected(activePoints) {
+    //Get seleted point datasetIndex and index in that dataset
     var datasetid = activePoints[0].datasetIndex;
     var id = activePoints[0].index;
     var dmIndex;
@@ -165,6 +174,7 @@ function setSelected(activePoints) {
     } else {
         dmIndex = descendingDataModelIndex[id].modelIndex;
     }
+    //Get actual model data
     var data = model[dmIndex];
 
     //get table body
@@ -174,7 +184,6 @@ function setSelected(activePoints) {
     tablebody.innerHTML += buildNewRow(1, "selectedTable");
 
     //write new entries
-
     document.getElementById(`selectedTable1 row Cell id`).innerHTML = data.id;
     document.getElementById(`selectedTable1 row Cell dateAdded`).innerHTML = data.dateAdded.substring(0, 19);
     document.getElementById(`selectedTable1 row Cell originalCSV`).innerHTML = data.originalCSV.substring(0, 10) + "...";
@@ -186,13 +195,9 @@ function setSelected(activePoints) {
     linkHtml += `<a href="SortEntries/Delete/${data.id}">Delete</a> | `;
     linkHtml += `<a href="SortEntries/DownloadFile/${data.id}">Download</a>`;
     document.getElementById(`selectedTable1 row Cell links`).innerHTML = linkHtml;
-
-
-
-    console.log(data);
 }
 
-
+//Build chart
 const ctx = document.getElementById('myChart');
 const myChart = new Chart(ctx, {
     type: 'scatter',
@@ -244,4 +249,5 @@ const myChart = new Chart(ctx, {
     }
 });
 
+//set table to first page
 changePage(0);
