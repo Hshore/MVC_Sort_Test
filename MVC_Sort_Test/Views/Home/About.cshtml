@@ -1,6 +1,18 @@
 ﻿@{
     ViewData["Title"] = "About";
 }
-<h1>@ViewData["Title"]</h1>
+<h1>About this website.</h1>
 
-<p>This is the About Page.</p>
+<p>
+This website is a simple interger sorter build with MVC ASP.NET core. Its goal is to sort Ints that are provided in a CSV format, the user can decide to sort accending or decending
+using radio toggles in the create page. The user can also download as .json, view details or delete entries.
+</p>
+<p>
+I decided to use CSV as this seemed the simplest way for a user to manually enter a list of numbers, this aproach will also allow a file with comma seperated values to be
+uploaded and sorted (I have not yet implemented file upload).
+</p>
+<p>
+To make the app more visual I have used Chart.js to draw a interactable graph of sort time vs interger Count, this enable easier understanding of the presented data, also allows clicking on a
+plot point to select it and show its details. Making it easier to find, see details of and delete specific entries.
+</p>
+

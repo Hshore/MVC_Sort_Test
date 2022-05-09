@@ -4,6 +4,7 @@ using MVC_Sort_Test.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MVC_Sort_Test.Migrations
 {
     [DbContext(typeof(MVC_Sort_TestContext))]
-    partial class MVC_Sort_TestContextModelSnapshot : ModelSnapshot
+    [Migration("20220509104742_fixedTypo")]
+    partial class fixedTypo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

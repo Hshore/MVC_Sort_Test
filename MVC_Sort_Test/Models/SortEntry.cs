@@ -11,7 +11,7 @@ namespace MVC_Sort_Test.Models
         
         [Required]
         [RegularExpression(@"^\d+,\d+(,\d+)*$", ErrorMessage = "Must match format '123,45,6,78,90'")]
-        public string? OrigonalCSV { get; set; }
+        public string? OriginalCSV { get; set; }
         
          
         public string? SortedCSV { get; set; }

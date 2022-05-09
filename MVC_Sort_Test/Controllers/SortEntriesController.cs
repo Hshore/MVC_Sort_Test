@@ -67,7 +67,7 @@ namespace MVC_Sort_Test.Controllers
 
             var watch = new Stopwatch();
             sortEntry.DateAdded = DateTime.Now;
-            string[] split = sortEntry.OrigonalCSV.Split(',');
+            string[] split = sortEntry.OriginalCSV.Split(',');
             List<int> ints = new List<int>();
             List<int> sortedInts = new List<int>();
             foreach (var s in split)
@@ -204,7 +204,7 @@ namespace MVC_Sort_Test.Controllers
                 {
                     DateAdded = DateTime.Now,
                     SortedCSV = "",
-                    OrigonalCSV = string.Join<int>(",", OGList),
+                    OriginalCSV = string.Join<int>(",", OGList),
                     SortOrder = randDirection
                 };
 
@@ -220,7 +220,7 @@ namespace MVC_Sort_Test.Controllers
             foreach (var item in UnsortedEntries)
             {
                 ints.Clear();
-                var split = item.OrigonalCSV.Split(',');
+                var split = item.OriginalCSV.Split(',');
                
                 foreach (var s in split)
                 {
