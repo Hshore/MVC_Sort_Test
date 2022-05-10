@@ -81,33 +81,19 @@ namespace MVC_Sort_Test.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateRandom()
-        {
-            //List of new entries with empty sortedCSV
-            List<SortEntry> UnsortedEntries = new List<SortEntry>();
-
+        public async Task<IActionResult> CreateRandom(int? id)
+        {          
            //Build new entries
-            for (int i = 0; i < 1000; i++)
-            {
-                //Build new entry 
-                var newEntry = new SortEntry();
+            for (int i = 0; i < id; i++)
+            {              
+                SortEntry newEntry = new SortEntry();
                 newEntry.GenerateRandomOriginalCSV();
+                newEntry.Sort();
                 //Add new entry to list of new unsorted entries
-                UnsortedEntries.Add(newEntry);              
-            }
-
-
-            //Generate SortedCVS     
-            foreach (var item in UnsortedEntries)
-            {
-                item.Sort();
-                //Check model is valid
-                
-                //The first few sorts always seem to be slow 
-                if (ModelState.IsValid )
+                if (ModelState.IsValid)
                 {
-                    _context.Add(item);
-                }               
+                    _context.Add(newEntry);
+                }
             }
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -181,7 +167,7 @@ namespace MVC_Sort_Test.Controllers
             {
                 return NotFound();
             }
-
+            
             return View(sortEntry);
         }
 
@@ -208,12 +194,12 @@ namespace MVC_Sort_Test.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteAllConfirmed(int id)
         {
-            var sortEntry = _context.SortEntry.AsAsyncEnumerable<SortEntry>();
-            await foreach (var item in sortEntry)
-            {             
-                _context.SortEntry.Remove(item);
+            
+            await foreach (var item in _context.SortEntry.AsAsyncEnumerable<SortEntry>())
+            {
+                _ = _context.SortEntry.Remove(item);       
             }
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();        
             return RedirectToAction(nameof(Index));
         }
 
@@ -241,10 +227,9 @@ namespace MVC_Sort_Test.Controllers
         // GET: SortEntries/DownloadAllFile
         public async Task<IActionResult> DownloadAllFile(int id)
         {
-            // Get item
-            var sortEntry = _context.SortEntry.AsAsyncEnumerable<SortEntry>();
+            // Get items            
             List<SortEntry> sortEntriesList = new List<SortEntry>();
-            await foreach (var item in sortEntry)
+            await foreach (var item in _context.SortEntry.AsAsyncEnumerable<SortEntry>())
             {
                 sortEntriesList.Add(item);
             }

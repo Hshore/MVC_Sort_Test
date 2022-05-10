@@ -5,46 +5,63 @@
 }
 
 <h1 class="text-center">Details</h1>
-<h4 class="text-center">id#@Model.Id</h4>
 <hr />
-<h5 class="text-center">DateAdded:</h5>
-<p class="text-center text-break text-wrap">@Model.DateAdded</p>
 
-<h5 class="text-center">OriginalCSV:</h5>
-<p class="text-center">
-	<a class="" data-bs-toggle="collapse" href="#originalCSV" role="button" aria-expanded="false" aria-controls="originalCSV">
-	 Show OriginalCSV
-	</a>
-</p>
-<div class="text-center text-break text-wrap collapse" id="originalCSV">@Model.OriginalCSV</div>
+<div>
+	<h5 class="d-inline-block">Id:</h5>
+	<p class="text-break text-wrap d-inline-block">@Model.Id</p>
+</div>
 
-<h5 class="text-center">SortedCSV:</h5>
-<p class="text-center">
-	<a class="" data-bs-toggle="collapse" href="#sortedCSV" role="button" aria-expanded="false" aria-controls="sortedCSV">
-	 Show SortedCSV
-	</a>
-</p>
-<div class="text-center text-break text-wrap collapse" id="sortedCSV">@Model.SortedCSV</div>
+<div>
+	<h5 class="d-inline-block">DateAdded:</h5>
+	<p class="text-break text-wrap d-inline-block">@Model.DateAdded</p>
+</div>
 
-<h5 class="text-center" >Sort Direction:</h5>
-<p class="text-center text-break text-wrap">
-	@if (Model.SortOrder == 1) 
-	{
-		var s = "Ascending";
-		@s
-		
-	}else
-	{
-		var s = "Descending";
-		@s
-	}
-</p>
+<div>
+	<h5 class="d-inline-block">OriginalCSV:</h5>
+	<p class="d-inline-block">
+		<a class="" data-bs-toggle="collapse" href="#originalCSV" role="button" aria-expanded="false" aria-controls="originalCSV">
+			Show OriginalCSV
+		</a>
+	</p>
+</div>
+<div class="text-break text-wrap collapse" id="originalCSV">@Model.OriginalCSV</div>
 
-<h5 class="text-center" >Sort Time:</h5>
-<p class="text-center text-break text-wrap">
-	@Model.SortTime
-</p>
-<div class="text-center">
+<div>
+	<h5 class="d-inline-block">SortedCSV:</h5>
+	<p class="d-inline-block">
+		<a class="" data-bs-toggle="collapse" href="#sortedCSV" role="button" aria-expanded="false" aria-controls="sortedCSV">
+			Show SortedCSV
+		</a>
+	</p>
+</div>
+<div class="text-break text-wrap collapse" id="sortedCSV">@Model.SortedCSV</div>
+
+<div>
+	<h5 class="d-inline-block">Sort Direction:</h5>
+	<p class="d-inline-block text-break text-wrap">
+		@if (Model.SortOrder == 1)
+		{
+			var s = "Ascending";
+			@s
+
+		}
+		else
+		{
+			var s = "Descending";
+			@s
+		}
+	</p>
+</div>
+
+<div>
+	<h5 class="d-inline-block">Sort Time:</h5>
+	<p class="d-inline-block text-break text-wrap">
+		@Model.SortTime
+	</p>
+</div>
+
+<div>
 	<form>	
 		<a class="btn btn-primary"asp-action="Index">Back to Sorter</a>
 	</form>

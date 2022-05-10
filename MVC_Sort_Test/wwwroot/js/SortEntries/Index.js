@@ -135,7 +135,7 @@ function nextTablePage(tableName) {
         document.getElementById(`${tableName}${i} row Cell id`).innerHTML = Items[i].id;
         document.getElementById(`${tableName}${i} row Cell dateAdded`).innerHTML = Items[i].dateAdded.substring(0, 19);
         document.getElementById(`${tableName}${i} row Cell originalCSV`).innerHTML = Items[i].originalCSV.substring(0, 10) + "...";
-        document.getElementById(`${tableName}${i} row Cell sortedCSV`).innerHTML = Items[i].sortedCSV.substring(0, 10);
+        document.getElementById(`${tableName}${i} row Cell sortedCSV`).innerHTML = Items[i].sortedCSV.substring(0, 10) + "...";
         document.getElementById(`${tableName}${i} row Cell sortTime`).innerHTML = Items[i].sortTime;
         document.getElementById(`${tableName}${i} row Cell sortOrder`).innerHTML = Items[i].sortOrder;
        
@@ -187,7 +187,7 @@ function setSelected(activePoints) {
     document.getElementById(`selectedTable1 row Cell id`).innerHTML = data.id;
     document.getElementById(`selectedTable1 row Cell dateAdded`).innerHTML = data.dateAdded.substring(0, 19);
     document.getElementById(`selectedTable1 row Cell originalCSV`).innerHTML = data.originalCSV.substring(0, 10) + "...";
-    document.getElementById(`selectedTable1 row Cell sortedCSV`).innerHTML = data.sortedCSV.substring(0, 10);
+    document.getElementById(`selectedTable1 row Cell sortedCSV`).innerHTML = data.sortedCSV.substring(0, 10) + "...";
     document.getElementById(`selectedTable1 row Cell sortTime`).innerHTML = data.sortTime;
     document.getElementById(`selectedTable1 row Cell sortOrder`).innerHTML = data.sortOrder;
     

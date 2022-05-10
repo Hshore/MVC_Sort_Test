@@ -31,14 +31,28 @@
 				<span asp-validation-for="OriginalCSV" class="text-danger"></span>
 			</div>
 			<div class="form-group ">
-				<button type="submit" class="btn-block btn-primary btn-sm">Sort</button>
+				<button type="submit" class="btn btn-primary btn-lg">Sort My CSV</button>
 			</div>
 		</form>
-		<h1 class="text-center">Sort 1000 random CSVs</h1>
+		<h1 class="text-center">Sort random CSVs</h1>
 		<hr />
-		<form asp-action="CreateRandom">
-			<button type="submit" class="btn btn-primary btn-sm">Random</button>
-		</form>
+		<div class="text-center">
+			<div class="text-center d-inline-block">
+				<form asp-action="CreateRandom" asp-route-id="10">
+					<button type="submit" class="btn btn-success btn-lg">Sort 10 randomCSVs</button>
+				</form>
+			</div>
+			<div class="text-center d-inline-block">
+				<form asp-action="CreateRandom" asp-route-id="100">
+					<button type="submit" class="btn btn-success btn-lg">Sort 100 randomCSVs</button>
+				</form>
+			</div>
+			<div class="text-center d-inline-block">
+				<form asp-action="CreateRandom" asp-route-id="1000">
+					<button type="submit" class="btn btn-success btn-lg">Sort 1000 randomCSVs</button>
+				</form>
+			</div>
+		</div>
 	</div>
 </div>
 

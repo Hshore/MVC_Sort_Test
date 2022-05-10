@@ -10,7 +10,7 @@
 
 <div>
 	<table id="selectedTable" class="table table-hover table-sm">
-		<thead>	
+		<thead>
 		</thead>
 		<tbody id="selectedTableBody">
 			<tr>
@@ -27,7 +27,7 @@
 	<button id="pageNum" type="button" class="btn btn-info">0</button>
 	<button type="button" class="btn btn-outline-primary btn-sm" onclick="changePage()">&gt</button>
 	<button type="button" class="btn btn-outline-primary btn-sm" onclick="changePage((totalPages -1))">&gt&gt</button>
-	<a asp-action="DeleteAll" class="btn btn-outline-danger btn-sm">DelAll</a>	
+	<a asp-action="DeleteAll" class="btn btn-outline-danger btn-sm">DelAll</a>
 </div>
 <div>
 	<table id="myTable" class="table table-hover table-sm">
@@ -63,10 +63,22 @@
 	{
 		<h2 class="text-center">Looking abit quiet here!</h2>
 		<div class="text-center">
-			<form asp-action="CreateRandom">
-				<button type="submit" class="btn btn-success btn-lg">Sort 1000 random CSVs</button>
-			</form>
-		</div>	
+			<div class="text-center d-inline-block">
+				<form asp-action="CreateRandom" asp-route-id="10">
+					<button type="submit" class="btn btn-success btn-lg">Sort 10 randomCSVs</button>
+				</form>
+			</div>
+			<div class="text-center d-inline-block">
+				<form asp-action="CreateRandom" asp-route-id="100">
+					<button type="submit" class="btn btn-success btn-lg">Sort 100 randomCSVs</button>
+				</form>
+			</div>
+			<div class="text-center d-inline-block">
+				<form asp-action="CreateRandom" asp-route-id="1000">
+					<button type="submit" class="btn btn-success btn-lg">Sort 1000 randomCSVs</button>
+				</form>
+			</div>
+		</div>
 	}
 </div>
 
