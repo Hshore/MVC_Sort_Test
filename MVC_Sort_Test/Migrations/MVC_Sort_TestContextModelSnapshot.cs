@@ -48,7 +48,7 @@ namespace MVC_Sort_Test.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SortEntry");
+                    b.ToTable("SortEntry", (string)null);
                 });
 #pragma warning restore 612, 618
         }

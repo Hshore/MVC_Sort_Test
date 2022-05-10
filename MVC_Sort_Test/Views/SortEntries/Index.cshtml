@@ -27,7 +27,7 @@
 	<button id="pageNum" type="button" class="btn btn-info">0</button>
 	<button type="button" class="btn btn-outline-primary btn-sm" onclick="changePage()">&gt</button>
 	<button type="button" class="btn btn-outline-primary btn-sm" onclick="changePage((totalPages -1))">&gt&gt</button>
-	<a asp-action="DeleteAll" class="btn btn-outline-danger btn-sm">DelAll</a>
+	<a asp-action="DeleteAll" class="btn btn-outline-danger btn-sm">DelAll</a>	
 </div>
 <div>
 	<table id="myTable" class="table table-hover table-sm">
@@ -51,8 +51,8 @@
 				<th class="text-center" onclick="sortTable(5)">
 					@Html.DisplayNameFor(model => model.SortOrder)
 				</th>
-				<th class="text-center">
-					Links
+				<th class="text-end">
+					<a asp-action="DownloadAllFile" class="btn btn-outline-danger btn-sm text-end">DownloadALL</a>
 				</th>
 			</tr>
 		</thead>

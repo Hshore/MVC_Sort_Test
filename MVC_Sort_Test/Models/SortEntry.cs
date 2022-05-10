@@ -75,10 +75,10 @@ namespace MVC_Sort_Test.Models
         {
             //Build originalCSV
             List<int> OGList = new List<int>();
-            var randIntCount = Extensions.ThreadSafeRandom.Next(2, 1000);
+            var randIntCount = Extensions.ThreadSafeRandom.Next(2, 2000);
             for (int j = 0; j < randIntCount; j++)
             {
-                OGList.Add(Extensions.ThreadSafeRandom.Next(0, 5000));
+                OGList.Add(Extensions.ThreadSafeRandom.Next(-10000, 10000));
             }
             OriginalCSV = string.Join<int>(",", OGList);
             SortOrder = (Extensions.ThreadSafeRandom.Next(0, 2) == 1) ? 1 : -1;

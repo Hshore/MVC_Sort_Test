@@ -138,8 +138,8 @@ function nextTablePage(tableName) {
         document.getElementById(`${tableName}${i} row Cell sortedCSV`).innerHTML = Items[i].sortedCSV.substring(0, 10);
         document.getElementById(`${tableName}${i} row Cell sortTime`).innerHTML = Items[i].sortTime;
         document.getElementById(`${tableName}${i} row Cell sortOrder`).innerHTML = Items[i].sortOrder;
-        let linkHtml = `<a href="SortEntries/Edit/${Items[i].id}">Edit</a> | `;
-        linkHtml += `<a href="SortEntries/Details/${Items[i].id}">Details</a> | `;
+       
+        let linkHtml = `<a href="SortEntries/Details/${Items[i].id}">Details</a> | `;
         linkHtml += `<a href="SortEntries/Delete/${Items[i].id}">Delete</a> | `;
         linkHtml += `<a href="SortEntries/DownloadFile/${Items[i].id}">Download</a>`;
         document.getElementById(`${tableName}${i} row Cell links`).innerHTML = linkHtml;
@@ -190,8 +190,8 @@ function setSelected(activePoints) {
     document.getElementById(`selectedTable1 row Cell sortedCSV`).innerHTML = data.sortedCSV.substring(0, 10);
     document.getElementById(`selectedTable1 row Cell sortTime`).innerHTML = data.sortTime;
     document.getElementById(`selectedTable1 row Cell sortOrder`).innerHTML = data.sortOrder;
-    let linkHtml = `<a href="SortEntries/Edit/${data.id}">Edit</a> | `;
-    linkHtml += `<a href="SortEntries/Details/${data.id}">Details</a> | `;
+    
+    let linkHtml = `<a href="SortEntries/Details/${data.id}">Details</a> | `;
     linkHtml += `<a href="SortEntries/Delete/${data.id}">Delete</a> | `;
     linkHtml += `<a href="SortEntries/DownloadFile/${data.id}">Download</a>`;
     document.getElementById(`selectedTable1 row Cell links`).innerHTML = linkHtml;

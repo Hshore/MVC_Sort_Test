@@ -113,8 +113,8 @@ namespace MVC_Sort_Test.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
-        // GET: SortEntries/Edit/5
+        // UNUSED
+       /* // GET: SortEntries/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -128,9 +128,10 @@ namespace MVC_Sort_Test.Controllers
                 return NotFound();
             }
             return View(sortEntry);
-        }
+        }*/
 
-        // POST: SortEntries/Edit/5
+        // UNUSED
+       /* // POST: SortEntries/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -164,6 +165,7 @@ namespace MVC_Sort_Test.Controllers
             }
             return View(sortEntry);
         }
+*/
 
         // GET: SortEntries/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -235,6 +237,28 @@ namespace MVC_Sort_Test.Controllers
             
             //Send the File to Download.
             return File(bytes, "application/octet-stream", sortEntry.Id+".json");
+        }
+        // GET: SortEntries/DownloadAllFile
+        public async Task<IActionResult> DownloadAllFile(int id)
+        {
+            // Get item
+            var sortEntry = _context.SortEntry.AsAsyncEnumerable<SortEntry>();
+            List<SortEntry> sortEntriesList = new List<SortEntry>();
+            await foreach (var item in sortEntry)
+            {
+                sortEntriesList.Add(item);
+            }
+
+            //Build JSON
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            var json = JsonSerializer.Serialize(sortEntriesList, options);
+
+            //Read the JSON data into Byte Array.
+            var utf8 = new UTF8Encoding();
+            byte[] bytes = utf8.GetBytes(json);
+
+            //Send the File to Download.
+            return File(bytes, "application/octet-stream",  "allSortEntries.json");
         }
 
         private bool SortEntryExists(int id)

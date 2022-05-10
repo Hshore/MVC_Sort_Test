@@ -4,32 +4,48 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
-<div>
-    <h4>SortEntry</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateAdded)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateAdded)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.OriginalCSV)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.OriginalCSV)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SortedCSV)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SortedCSV)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<h1 class="text-center">Details</h1>
+<h4 class="text-center">id#@Model.Id</h4>
+<hr />
+<h5 class="text-center">DateAdded:</h5>
+<p class="text-center text-break text-wrap">@Model.DateAdded</p>
+
+<h5 class="text-center">OriginalCSV:</h5>
+<p class="text-center">
+	<a class="" data-bs-toggle="collapse" href="#originalCSV" role="button" aria-expanded="false" aria-controls="originalCSV">
+	 Show OriginalCSV
+	</a>
+</p>
+<div class="text-center text-break text-wrap collapse" id="originalCSV">@Model.OriginalCSV</div>
+
+<h5 class="text-center">SortedCSV:</h5>
+<p class="text-center">
+	<a class="" data-bs-toggle="collapse" href="#sortedCSV" role="button" aria-expanded="false" aria-controls="sortedCSV">
+	 Show SortedCSV
+	</a>
+</p>
+<div class="text-center text-break text-wrap collapse" id="sortedCSV">@Model.SortedCSV</div>
+
+<h5 class="text-center" >Sort Direction:</h5>
+<p class="text-center text-break text-wrap">
+	@if (Model.SortOrder == 1) 
+	{
+		var s = "Ascending";
+		@s
+		
+	}else
+	{
+		var s = "Descending";
+		@s
+	}
+</p>
+
+<h5 class="text-center" >Sort Time:</h5>
+<p class="text-center text-break text-wrap">
+	@Model.SortTime
+</p>
+<div class="text-center">
+	<form>	
+		<a class="btn btn-primary"asp-action="Index">Back to Sorter</a>
+	</form>
 </div>
