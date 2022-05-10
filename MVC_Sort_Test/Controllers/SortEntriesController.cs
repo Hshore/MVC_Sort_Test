@@ -62,53 +62,8 @@ namespace MVC_Sort_Test.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,OriginalCSV,SortOrder")] SortEntry sortEntry)
         {
-            var watch = new Stopwatch();
-            List<int> ints = new List<int>();
-            List<int> sortedInts = new List<int>();
-            string[] split = sortEntry.OriginalCSV.Split(',');
-            sortEntry.DateAdded = DateTime.Now;
-            //Parse ints and skip int if not a int.
-            //regex catchs all formatting issuses except for number being <||> max/min for a int.
-            //try cath block filers out the unusable numbers
-            foreach (var s in split)
-            {
-                try
-                {
-                    ints.Add(int.Parse(s));
-                }
-                catch (Exception)
-                {
-                   //skip this entry
-                }
-            }
-
-            //Do the sort depending on the direction selected
-            if (sortEntry.SortOrder == 1)
-            {
-                watch.Restart();
-                // Sort with LINQ
-                /* var sorted = ints.OrderBy(num => num).ToArray(); */
-                // Sort with array.sort()
-                ints.Sort();
-                watch.Stop();
-
-                sortEntry.SortedCSV = string.Join<int>(",", ints);
-                sortEntry.SortTime = watch.Elapsed.TotalMilliseconds;
-            }
-            else
-            {
-                watch.Restart();
-                // Sort with LINQ
-                /* var sorted = ints.OrderByDescending(num => num).ToArray(); */
-                // Sort with array.sort()
-                ints.Sort();
-                ints.Reverse();
-                watch.Stop();
-                sortEntry.SortedCSV = string.Join<int>(",", ints);
-                sortEntry.SortTime = watch.Elapsed.TotalMilliseconds;
-            }
             
-            //Check final sortEntry is valid and insert into databse.      
+            sortEntry.Sort();
             if (ModelState.IsValid)
             {                
                 _context.Add(sortEntry);               
@@ -130,77 +85,29 @@ namespace MVC_Sort_Test.Controllers
         {
             //List of new entries with empty sortedCSV
             List<SortEntry> UnsortedEntries = new List<SortEntry>();
-            var watch = new Stopwatch();
 
            //Build new entries
-            for (int i = 0; i < 1010; i++)
+            for (int i = 0; i < 1000; i++)
             {
-                //Build originalCSV
-                List<int> OGList = new List<int>();                                         
-                var randIntCount = Extensions.ThreadSafeRandom.Next(2, 1000);
-                var randDirection = (Extensions.ThreadSafeRandom.Next(0, 2) == 1) ? 1 : -1;
-                for (int j = 0; j < randIntCount; j++)
-                {
-                    OGList.Add(Extensions.ThreadSafeRandom.Next(0,5000));
-                }
-                //Build new entry with this originalCSV
-                var newEntry = new SortEntry
-                {
-                    DateAdded = DateTime.Now,
-                    SortedCSV = "",
-                    OriginalCSV = string.Join<int>(",", OGList),
-                    SortOrder = randDirection
-                };
+                //Build new entry 
+                var newEntry = new SortEntry();
+                newEntry.GenerateRandomOriginalCSV();
                 //Add new entry to list of new unsorted entries
                 UnsortedEntries.Add(newEntry);              
             }
 
 
-            //Generate SortedCVS
-            List<int> ints = new List<int>(); 
-            var count = 0;
+            //Generate SortedCVS     
             foreach (var item in UnsortedEntries)
             {
-                ints.Clear();
-                var split = item.OriginalCSV.Split(',');               
-                foreach (var s in split)
-                {
-                    ints.Add(int.Parse(s));
-                }
-
-                //Sort in selected direction
-                if (item.SortOrder == 1)
-                {                 
-                    watch.Restart();
-                    // Sort with LINQ
-                    /* var sorted = ints.OrderBy(num => num).ToArray(); */
-                    // Sort with array.sort()             
-                    ints.Sort();                   
-                    watch.Stop();
-                    item.SortedCSV = string.Join<int>(",", ints);
-                    item.SortTime = watch.Elapsed.TotalMilliseconds;
-
-                }
-                else
-                {
-                    watch.Restart();
-                    // Sort with LINQ
-                    /* var sorted = ints.OrderByDescending(num => num).ToArray(); */
-                    // Sort with array.sort()
-                    ints.Sort();
-                    ints.Reverse();
-                    watch.Stop();
-                    item.SortedCSV = string.Join<int>(",", ints);
-                    item.SortTime = watch.Elapsed.TotalMilliseconds;
-                }
+                item.Sort();
                 //Check model is valid
-                //The count check is there to skip over the first 10 entries
-                //The first few sorts always seem to be slow and this is a effort to filter them out
+                
+                //The first few sorts always seem to be slow 
                 if (ModelState.IsValid )
                 {
                     _context.Add(item);
-                }
-                count++;
+                }               
             }
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
