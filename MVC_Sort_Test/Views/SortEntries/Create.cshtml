@@ -25,8 +25,8 @@
 				</div>
 			</fieldset>
 			<div class="form-group text-start">
-				<label asp-for="OriginalCSV" class="control-label">--Comma-seperated values</label>
-				<label asp-for="OriginalCSV" class="control-label">--(Values grater or lower than (-2147483647 / 2147483647) will be excluded</label>
+				<label asp-for="OriginalCSV" class="control-label">Comma-seperated values</label>
+				<label asp-for="OriginalCSV" class="control-label">Values grater or lower than -2147483647 / 2147483647 will be excluded!</label>
 				<input asp-for="OriginalCSV" class="form-control" placeholder="123,45,6,7,89,0" />
 				<span asp-validation-for="OriginalCSV" class="text-danger"></span>
 			</div>

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MVC_Sort_Test.Migrations
 {
-    public partial class Initial : Migration
+    public partial class Initial_Migration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,7 +16,7 @@ namespace MVC_Sort_Test.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DateAdded = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    OrigonalCSV = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OriginalCSV = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SortedCSV = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SortOrder = table.Column<int>(type: "int", nullable: false),
                     SortTime = table.Column<double>(type: "float", nullable: false)

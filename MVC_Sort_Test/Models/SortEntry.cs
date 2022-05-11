@@ -11,7 +11,7 @@ namespace MVC_Sort_Test.Models
         public DateTime DateAdded { get; set; }
         
         [Required]
-        [RegularExpression(@"^-?\d+,-?\d+(,-?\d+)*$", ErrorMessage = "Must match format '123,45,6,78,90'")]
+        [RegularExpression(@"^-?\d+,-?\d+(,-?\d+)*$", ErrorMessage = "Must be two numbers or more and match format '123,45,6,78,90'")]
         public string? OriginalCSV { get; set; }
         
          
@@ -27,21 +27,14 @@ namespace MVC_Sort_Test.Models
         {
             this.DateAdded = DateTime.Now;
             var watch = new Stopwatch();
-            List<int> ints = new List<int>();  
             //Parse ints and skip int if not a int.
             //regex catchs all formatting issuses except for number being <||> max/min for a int.
-            //try cath block filers out the unusable numbers
-            foreach (var s in OriginalCSV.Split(','))
-            {
-                try
-                {
-                    ints.Add(int.Parse(s));
-                }
-                catch (Exception)
-                {
-                    //skip this entry
-                }
-            }      
+            //LINQ query filers out the unusable numbers
+            int[] ints = OriginalCSV.Split(',')
+                    .Where(m => int.TryParse(m, out _))
+                    .Select(m => int.Parse(m))
+                    .ToArray();
+          
             //Do the sort depending on the direction selected
             if (this.SortOrder == 1)
             {
@@ -49,7 +42,8 @@ namespace MVC_Sort_Test.Models
                 // Sort with LINQ
                 /* var sorted = ints.OrderBy(num => num).ToArray(); */
                 // Sort with array.sort()
-                ints.Sort();
+                Array.Sort(ints);
+                
                 watch.Stop();
 
                 this.SortedCSV = string.Join<int>(",", ints);
@@ -61,8 +55,8 @@ namespace MVC_Sort_Test.Models
                 // Sort with LINQ
                 /* var sorted = ints.OrderByDescending(num => num).ToArray(); */
                 // Sort with array.sort()
-                ints.Sort();
-                ints.Reverse();
+                Array.Sort(ints);
+                Array.Reverse(ints);
                 watch.Stop();
                 this.SortedCSV = string.Join<int>(",", ints);
                 this.SortTime = watch.Elapsed.TotalMilliseconds;
@@ -72,14 +66,14 @@ namespace MVC_Sort_Test.Models
         public void GenerateRandomOriginalCSV()
         {
             //Build originalCSV
-            var randIntCount = Extensions.ThreadSafeRandom.Next(2, 100);
+            var randIntCount = Extensions.ThreadSafeRandom.Next(2, 1000);
             int[] OGList = new int[randIntCount];
             for (int j = 0; j < randIntCount; j++)
             {
                 OGList[j] = Extensions.ThreadSafeRandom.Next(-10000, 10000);
             }
-            OriginalCSV = string.Join<int>(",", OGList);
-            SortOrder = (Extensions.ThreadSafeRandom.Next(0, 2) == 1) ? 1 : -1;           
+            this.OriginalCSV = string.Join<int>(",", OGList);
+            this.SortOrder = (Extensions.ThreadSafeRandom.Next(0, 2) == 1) ? 1 : -1;           
         }
 
     }
