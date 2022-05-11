@@ -33,30 +33,47 @@
 		<li>Run sort once and compare to a pre computed gradient of expected time results. Run again if SortTime is not within tolerance.</li>
 	</ul>
 </p>
-<h5>High memory useage:</h5>
+<h5>High memory usage:</h5>
 <p>
-	Using the memory profiler in visual studio you can see that the memory use rises as you add entries. Adding a few thousand entries
-	using the random buttons will bring the memory usage up above 1gb and beyond. I am not sure why this is happening.
-	I canged a few lines in the SortEntry.sort() that seemed to bring down the memory usage alot.
-
+	Using the memory profiler in visual studio you can see that the memory use rises as you add entries.
+	Adding a few thousand entries using the random buttons will bring the memory usage up above 1gb and beyond.
+	I am not sure why this is happening. I changed a few lines in the SortEntry.sort() that seemed to bring down
+	the memory usage a lot.
 <pre>
 <code>
 	string[] split = OriginalCSV.Split(',');
 	foreach (var s in split) { ... }
-	
+
 	Changed to:
 
 	foreach (var s in OriginalCSV.Split(',')) { ... }	
 </code>
 </pre>
-	But from reading it seems that the garbage collection is complicated and its possible its as expected in VS debug mode
-	on my dev system that has plenty of RAM.
+	But from reading it seems that the garbage collection is complicated. It is possible memory usage is as expected
+	in VS debug mode on my dev system that has plenty of RAM.
 </p>
 
-<h3>Some things i would like to add:</h3>
+<h3>Feature ideas</h3>
 <h5>Sorting Algorithm Choices:</h5>
 <p>
-	It would be interesting to see the speed differance between different sort algoriths represented on the graph.
+	It would be interesting to see the speed difference between different sort algorithms represented on the graph.
 	I chose to use Array.Sort as it seems to be the fastest option.
-	Iplementing this would require much more knowladge than i have on sorting algoritams and the underlying code to Array.Sort.
+	Implementing this would require much more knowledge than I have on sorting algorithms and the underlying code
+	to Array.Sort.
+</p>
+<h5>File sort:</h5>
+<p>
+	To be able to upload a file of CSVs to be sorted. I believe this would be easy to implement.
+</p>
+<h3>Conclusion</h3>
+<p>
+	I have enjoyed building this project, mostly I have enjoyed visualising the data and have gained a better understanding of the MVC pattern. I made a few mistakes in the beginning, one mistake was to put all the sorting logic in the controller. After reading a little I realised that the logic should probably be in the model not the controller.
+	I am still unsure whether using a CSV as the input method is the right way to go. It seems like the most sensible way for a user to input any numbers they would like. CSV is a common file format that is widely used enabling easy setup of a file upload with lists of CSV to be sorted.
+
+</p>
+<p>
+	Although not complete if feel this app is in a good working state. I have many ideas for improvements and will likely continue to work on it. It has been a valuable and rewarding learning experience for me and I feel I have learnt a lot about MVC and web development.
+</p>
+<p>
+	Hayden Shore.
 </p>
