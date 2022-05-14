@@ -1,4 +1,4 @@
-## MVS Sort Test
+## MVC Sort Test
 A MVC ASP.NETcore app that can be used in conjunction with a MYSQL database to create and sort comma spaerated intergers.
 
 ## Public endpoints
