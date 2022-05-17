@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<MVC_Sort_Test.Models.SortEntry>
 
+
 @{
 	ViewData["Title"] = "Index";
 }
@@ -13,20 +14,20 @@
 		<thead>
 		</thead>
 		<tbody id="selectedTableBody">
-			<tr>
+			<tr id="selectedTableRow">
 				<td class="text-center">Select a point on the graph</td>
 			</tr>
 		</tbody>
 	</table>
 </div>
 
-<div class="text-center">
+<div class="text-center" id="table_nav">
 	<a asp-action="Create" class="btn btn-outline-success btn-sm">Create</a>
-	<button type="button" class="btn btn-outline-primary btn-sm" onclick="changePage(0)">&lt&lt</button>
-	<button type="button" class="btn btn-outline-primary btn-sm" onclick="changePage(-1)">&lt</button>
+	<button id="pageFirst" type="button" class="btn btn-outline-primary btn-sm">&lt&lt</button>
+	<button id="pageDown" type="button" class="btn btn-outline-primary btn-sm">&lt</button>
 	<button id="pageNum" type="button" class="btn btn-info">0</button>
-	<button type="button" class="btn btn-outline-primary btn-sm" onclick="changePage()">&gt</button>
-	<button type="button" class="btn btn-outline-primary btn-sm" onclick="changePage((totalPages -1))">&gt&gt</button>
+	<button id="pageUp" type="button" class="btn btn-outline-primary btn-sm">&gt</button>
+	<button id="pageLast" type="button" class="btn btn-outline-primary btn-sm">&gt&gt</button>
 	<a asp-action="DeleteAll" class="btn btn-outline-danger btn-sm">DelAll</a>
 </div>
 <div>
@@ -56,7 +57,52 @@
 				</th>
 			</tr>
 		</thead>
-		<tbody id="tableBody">
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr style="display: none;">
+					<td>
+						@item.Id
+					</td>
+					<td>
+						@item.DateAdded
+					</td>
+					<td>
+						@if (item.OriginalCSV.Length > 10){
+							var s = item.OriginalCSV.Substring(0, 10) + "...";
+							@s
+						}
+						else
+						{
+							var s = item.OriginalCSV + "...";
+							@s
+						}
+					</td>
+					<td>
+						@if (item.SortedCSV.Length > 10){
+							var s = item.SortedCSV.Substring(0, 10) + "...";
+							@s
+						}
+						else
+						{
+							var s = item.SortedCSV + "...";
+							@s
+						}
+					</td>
+					<td class="text-center">
+						@item.SortTime
+					</td>
+					<td class="text-center">
+						@item.SortOrder
+					</td>
+					<td class="text-end">
+						<a href="SortEntries/Details/@item.Id">Details</a>
+						<a href="SortEntries/Delete/@item.Id">Delete</a>
+						<a href="SortEntries/DownloadFile/@item.Id">Download</a>						
+					</td>
+				</tr>
+			}
+
 		</tbody>
 	</table>
 	@if (Model.Count() < 6)
